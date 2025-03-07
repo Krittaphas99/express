@@ -1,6 +1,8 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/solid'
+import { Bars3Icon, XMarkIcon ,ShoppingCartIcon } from '@heroicons/react/24/solid'
 import { Link } from 'react-router'
+import { useState } from "react";
+import AuthPopup from '@/pages/login';
 const navigation = [
   { name: 'Home', href: '/', current: true },
   { name: 'About', href: '/about', current: false },
@@ -8,11 +10,14 @@ const navigation = [
   { name: 'Calendar', href: '#', current: false },
 ]
 
+
+
 function classNames(...classes:any) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function Example() {
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
   return (
     <Disclosure as="nav" className="bg-sky-700">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -60,11 +65,29 @@ export default function Example() {
             >
               <span className="absolute -inset-1.5" />
               <span className="sr-only">View notifications</span>
-              <BellIcon aria-hidden="true" className="size-6" />
+              <ShoppingCartIcon  aria-hidden="true" className="size-6" />
             </button>
+              
+            <div className="relative ml-3">
+      {/* ปุ่มที่ใช้เปิด Dialog */}
+      <button
+        type="button"
+        className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden"
+        onClick={() => setIsLoginOpen(!isLoginOpen)} // คลิกปุ่มนี้เปิด/ปิด AuthPopup
+      >
+        <span className="absolute -inset-1.5" />
+        <span className="sr-only">View notifications</span>
+        <a className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" href="/">
+          Login
+        </a>
+      </button>
 
+      {/* เรียกใช้งาน AuthPopup และส่ง props isOpen และ setIsOpen */}
+      <AuthPopup isOpen={isLoginOpen} setIsOpen={setIsLoginOpen} />
+    </div>
+            
             {/* Profile dropdown */}
-            <Menu as="div" className="relative ml-3">
+            {/* <Menu as="div" className="relative ml-3">
               <div>
                 <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
                   <span className="absolute -inset-1.5" />
@@ -105,11 +128,11 @@ export default function Example() {
                   </a>
                 </MenuItem>
               </MenuItems>
-            </Menu>
+            </Menu> */}
           </div>
         </div>
       </div>
-
+      
       <DisclosurePanel className="sm:hidden">
         <div className="space-y-1 px-2 pt-2 pb-3">
           {navigation.map((item) => (
