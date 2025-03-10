@@ -1,23 +1,47 @@
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon ,ShoppingCartIcon } from '@heroicons/react/24/solid'
-import { Link } from 'react-router'
-import { useState } from "react";
-import AuthPopup from '@/pages/login';
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+} from "@headlessui/react";
+import {
+  Bars3Icon,
+  XMarkIcon,
+  ShoppingCartIcon,
+} from "@heroicons/react/24/solid";
+import { Link } from "react-router";
+import { useState, useEffect } from "react";
+import AuthPopup from "@/pages/login";
 const navigation = [
-  { name: 'Home', href: '/', current: true },
-  { name: 'About', href: '/about', current: false },
-  { name: 'Contacts', href: '/contacts', current: false },
-  { name: 'Calendar', href: '#', current: false },
-]
+  { name: "Home", href: "/", current: true },
+  { name: "About", href: "/about", current: false },
+  { name: "Contacts", href: "/contacts", current: false },
+  { name: "Calendar", href: "#", current: false },
+];
 
-
-
-function classNames(...classes:any) {
-  return classes.filter(Boolean).join(' ')
+function classNames(...classes: any) {
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function Example() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken"); // ลบ token
+    setIsLoggedIn(false);
+  };
+
   return (
     <Disclosure as="nav" className="bg-sky-700">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -27,8 +51,14 @@ export default function Example() {
             <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:ring-2 focus:ring-white focus:outline-hidden focus:ring-inset">
               <span className="absolute -inset-0.5" />
               <span className="sr-only">Open main menu</span>
-              <Bars3Icon aria-hidden="true" className="block size-6 group-data-open:hidden" />
-              <XMarkIcon aria-hidden="true" className="hidden size-6 group-data-open:block" />
+              <Bars3Icon
+                aria-hidden="true"
+                className="block size-6 group-data-open:hidden"
+              />
+              <XMarkIcon
+                aria-hidden="true"
+                className="hidden size-6 group-data-open:block"
+              />
             </DisclosureButton>
           </div>
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
@@ -37,7 +67,7 @@ export default function Example() {
                 alt="Your Company"
                 src="/images/girl.png"
                 className="h-8 w-auto"
-                color='bg-white'
+                color="bg-white"
               />
             </div>
             <div className="hidden sm:ml-6 sm:block">
@@ -46,10 +76,12 @@ export default function Example() {
                   <Link
                     key={item.name}
                     to={item.href}
-                    aria-current={item.current ? 'page' : undefined}
+                    aria-current={item.current ? "page" : undefined}
                     className={classNames(
-                      item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                      'rounded-md px-3 py-2 text-sm font-medium',
+                      item.current
+                        ? "bg-gray-900 text-white"
+                        : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                      "rounded-md px-3 py-2 text-sm font-medium"
                     )}
                   >
                     {item.name}
@@ -65,74 +97,88 @@ export default function Example() {
             >
               <span className="absolute -inset-1.5" />
               <span className="sr-only">View notifications</span>
-              <ShoppingCartIcon  aria-hidden="true" className="size-6" />
+              <ShoppingCartIcon aria-hidden="true" className="size-6" />
             </button>
-              
-            <div className="relative ml-3">
-      {/* ปุ่มที่ใช้เปิด Dialog */}
-      <button
-        type="button"
-        className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden"
-        onClick={() => setIsLoginOpen(!isLoginOpen)} // คลิกปุ่มนี้เปิด/ปิด AuthPopup
-      >
-        <span className="absolute -inset-1.5" />
-        <span className="sr-only">View notifications</span>
-        <a className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" href="/">
-          Login
-        </a>
-      </button>
 
-      {/* เรียกใช้งาน AuthPopup และส่ง props isOpen และ setIsOpen */}
-      <AuthPopup isOpen={isLoginOpen} setIsOpen={setIsLoginOpen} />
-    </div>
-            
-            {/* Profile dropdown */}
-            {/* <Menu as="div" className="relative ml-3">
-              <div>
-                <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
-                  <span className="absolute -inset-1.5" />
-                  <span className="sr-only">Open user menu</span>
-                  <img
-                    alt=""
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    className="size-8 rounded-full"
+            <div className="relative ml-3">
+              <div className="flex items-center gap-4">
+                {isLoggedIn ? (
+                  // ปุ่ม Logout ถ้าเข้าสู่ระบบแล้ว
+
+                  <div>
+                    {
+                      <Menu as="div" className="relative ml-3">
+                        <div>
+                          <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
+                            <span className="absolute -inset-1.5" />
+                            <span className="sr-only">Open user menu</span>
+                            <img
+                              alt=""
+                              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                              className="size-8 rounded-full"
+                            />
+                          </MenuButton>
+                        </div>
+                        <MenuItems
+                          transition
+                          className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+                        >
+                          <MenuItem>
+                            <a
+                              href="#"
+                              className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                            >
+                              Your Profile
+                            </a>
+                          </MenuItem>
+                          <MenuItem>
+                            <a
+                              href="#"
+                              className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                            >
+                              Settings
+                            </a>
+                          </MenuItem>
+                          <MenuItem>
+                            {({ active }) => (
+                              <button
+                                onClick={handleLogout}
+                                className={`block px-4 py-2 text-sm text-gray-700 ${
+                                  active ? "bg-gray-100" : ""
+                                }`}
+                              >
+                                Sign out
+                              </button>
+                            )}
+                          </MenuItem>
+                        </MenuItems>
+                      </Menu>
+                    }
+                  </div>
+                ) : (
+                  // ปุ่ม Login ถ้ายังไม่ได้ล็อกอิน
+                  <button
+                    onClick={() => setIsLoginOpen(true)}
+                    className="rounded-md bg-gray-800 px-3 py-2 text-sm font-medium text-white hover:bg-gray-700"
+                  >
+                    Login
+                  </button>
+                )}
+
+                {/* Popup Login */}
+                {isLoginOpen && (
+                  <AuthPopup
+                    isOpen={isLoginOpen}
+                    setIsOpen={setIsLoginOpen}
+                    setIsLoggedIn={setIsLoggedIn}
                   />
-                </MenuButton>
+                )}
               </div>
-              <MenuItems
-                transition
-                className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
-              >
-                <MenuItem>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
-                  >
-                    Your Profile
-                  </a>
-                </MenuItem>
-                <MenuItem>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
-                  >
-                    Settings
-                  </a>
-                </MenuItem>
-                <MenuItem>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
-                  >
-                    Sign out
-                  </a>
-                </MenuItem>
-              </MenuItems>
-            </Menu> */}
+            </div>
           </div>
         </div>
       </div>
-      
+
       <DisclosurePanel className="sm:hidden">
         <div className="space-y-1 px-2 pt-2 pb-3">
           {navigation.map((item) => (
@@ -140,10 +186,12 @@ export default function Example() {
               key={item.name}
               as="a"
               href={item.href}
-              aria-current={item.current ? 'page' : undefined}
+              aria-current={item.current ? "page" : undefined}
               className={classNames(
-                item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                'block rounded-md px-3 py-2 text-base font-medium',
+                item.current
+                  ? "bg-gray-900 text-white"
+                  : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                "block rounded-md px-3 py-2 text-base font-medium"
               )}
             >
               {item.name}
@@ -152,5 +200,5 @@ export default function Example() {
         </div>
       </DisclosurePanel>
     </Disclosure>
-  )
+  );
 }
