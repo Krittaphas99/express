@@ -29,6 +29,7 @@ const AuthPopup: React.FC<AuthPopupProps> = ({ isOpen, setIsOpen ,setIsLoggedIn}
       AuthenAPI.login(loginData)
         .then((response) => {
           const { accessToken, refreshToken } = response.data;
+
           localStorage.setItem("accessToken", accessToken);
           localStorage.setItem("refreshToken", refreshToken);
           
@@ -43,7 +44,7 @@ const AuthPopup: React.FC<AuthPopupProps> = ({ isOpen, setIsOpen ,setIsLoggedIn}
             error.response?.data?.message || error.message
           );
         });
-    
+        
     // setTimeout(() => {
 
     //   alert("Login successful!");

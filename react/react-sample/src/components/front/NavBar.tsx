@@ -15,6 +15,8 @@ import {
 import { Link } from "react-router";
 import { useState, useEffect } from "react";
 import AuthPopup from "@/pages/login";
+import { AuthenAPI } from "@/service/auth";
+import { user } from "@/types/User";
 const navigation = [
   { name: "Home", href: "/", current: true },
   { name: "About", href: "/about", current: false },
@@ -30,12 +32,31 @@ export default function Example() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  const [User, setUser] = useState<user>();
+
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (token) {
       setIsLoggedIn(true);
+      const fetchCurrentUser = async () => {
+        try {
+          const response = await AuthenAPI.currentUser();
+          console.log(response.data);
+          setUser(response.data);
+        } catch (error) {
+          setIsLoggedIn(false);
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
+          console.error("Failed to fetch user data", error);
+        }
+      };
+      fetchCurrentUser();
+     // เรียกใช้งาน
     }
-  }, []);
+    else{
+      setIsLoggedIn(false);}
+  }
+  , []);
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken"); // ลบ token
@@ -114,7 +135,7 @@ export default function Example() {
                             <span className="sr-only">Open user menu</span>
                             <img
                               alt=""
-                              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                              src={User?.image}
                               className="size-8 rounded-full"
                             />
                           </MenuButton>
@@ -125,7 +146,7 @@ export default function Example() {
                         >
                           <MenuItem>
                             <a
-                              href="#"
+                              href="/profile"
                               className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
                             >
                               Your Profile

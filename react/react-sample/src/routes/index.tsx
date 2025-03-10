@@ -4,6 +4,7 @@ import Contacts from "@/pages/Contacts";
 import Home from "@/pages/Home";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import ProductsDetail from "@/pages/ProductsDetail";
+import Profile from "@/pages/profile";
 
 const router = createBrowserRouter([
   { 
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
     {
         path:"/contacts",
         element:<Contacts />
+    },
+    {
+        path:"/profile",
+        element:<Profile />
     },
     {
         path:"/products/:id",
