@@ -51,7 +51,7 @@ const Home: React.FC = () => {
         <h2 className="text-2xl font-bold tracking-tight text-gray-900">Ours Products</h2>
 
         {/* ส่วนของ Input Search และ ปุ่มค้นหา */}
-        <form className="max-w-md mx-auto">   
+        <form className="flex justify-start max-w-auto w-10xl" >    
     <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
     <div className="relative">
         <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
