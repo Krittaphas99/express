@@ -1,11 +1,14 @@
-export type rootProJectInfo = ProJectInfo[]
+export type rootServiceInfo = ServiceInfo[]
 
-export interface ProJectInfo {
+export interface ServiceInfo {
   id: Id
   serviceName: string
   plan: string
   dateCreate: string
   idString: string
+  status: string
+  totalrequest: number
+  requestmonth: number
 }
 
 export interface Id {
