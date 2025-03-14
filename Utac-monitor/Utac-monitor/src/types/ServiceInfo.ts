@@ -5,11 +5,15 @@ export interface ServiceInfo {
   serviceName: string
   plan: string
   dateCreate: string
+  ip: string
+  port: number
+  endpoint: string
   idString: string
   status: string
-  totalrequest: number
-  requestmonth: number
+  totalRequest: number
+  requestMonth: number
 }
+
 
 export interface Id {
   timestamp: number
