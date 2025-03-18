@@ -12,5 +12,7 @@ export const ServiceInfoAPI = {
   getALL: () => api.get<rootServiceInfo>("/Service"), // แก้เป็น "/Service"
   getOne: (id: string) => api.get<ServiceInfo>(`/Service/${id}`),
   update: (id: string,reqbody:ServiceInfo) => api.put<ServiceInfo>(`/Service/${id}`,reqbody),
-  delete: (id: string) => api.delete<ServiceInfo>(`/Service/${id}`),  // แก้เป็น "/Service/${id}"
+  delete: (id: string) => api.delete<ServiceInfo>(`/Service/${id}`),
+  refresh: (id: string) => api.post<ServiceInfo>(`/Service/Refresh/${id}`),
+    // แก้เป็น "/Service/${id}"
 };

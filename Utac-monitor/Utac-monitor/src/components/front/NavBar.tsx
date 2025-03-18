@@ -19,9 +19,8 @@ import { AuthenAPI } from "@/service/auth";
 import { user } from "@/types/User";
 const navigation = [
   { name: "Home", href: "/", current: true },
-  { name: "About", href: "/about", current: false },
-  { name: "Contacts", href: "/contacts", current: false },
-  { name: "Calendar", href: "#", current: false },
+  { name: "Log", href: "/log", current: false },
+  
 ];
 
 function classNames(...classes: any) {
