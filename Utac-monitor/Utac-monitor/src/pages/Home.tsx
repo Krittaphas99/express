@@ -122,10 +122,18 @@ const Home: React.FC = () => {
       setOpenOptionsId(null);
     });
   };
-
-  if (loading) {
-    return <Loadings />;
-  }
+  const SkeletonCard = () => (
+    <div className="flex items-center bg-gray-200 shadow-lg rounded-2xl relative w-full animate-pulse p-4 gap-7">
+      
+      <div className="w-10 h-10 text-3xl text-gray-300">UTAC</div>
+      <div className="ml-4 space-y-5 w-2/3">
+      <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+      <div className="h-3 bg-gray-300 rounded w-2/4"></div>
+    
+      </div>
+    </div>
+  );
+ 
 
   return (
     <div className="bg-white">
@@ -178,7 +186,11 @@ const Home: React.FC = () => {
           </form>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mt-8">
-          {Services.map((Service) => (
+          {loading ? (
+            Array.from({ length: 6 }).map((_, index) => ( 
+              <SkeletonCard key={index} />
+            ))
+          ):Services.map((Service) => (
             <button
               key={Service.idString}
               className="flex items-center bg-gray-200 shadow-lg rounded-2xl relative w-full text-left hover:bg-gray-300 transition-all"
@@ -240,11 +252,12 @@ const Home: React.FC = () => {
               </div>
 
               <div className="p-4 w-2/3 mt-4">
-                <h2 className="text-xl font-bold">{Service.plan}</h2>
-                <p className="text-gray-600 mt-2">{Service.serviceName}</p>
+                <h2 className="text-xl font-bold truncate w-full">{Service.plan}</h2>
+                <p className="text-gray-600 mt-2 truncate w-full">{Service.serviceName}</p>
               </div>
             </button>
           ))}
+        
         </div>
       </div>
     </div>
